@@ -1,24 +1,18 @@
 
-function buildPlot(sample) {
-    d3.json("samples.json").then((data) => {
-        var samples = data.samples;
-        var resultArray = samples.filter(sampleObj => sampleObj.id == sample);
-        var result = resultArray[0];
-        
-        var otu_ids = result.otu_ids;
-        var otu_labels = result.otu_labels;
-        var sample_values = result.sample_values;
+    d3.json("samples.json").then((importedData) => {
+        var data = importedData;
 
-        var plot = [{
+        var trace1 = {
             type: 'bar',
-            x: otu_labels,
-            y: otu_ids,
+            x: data.map(row => row.otu_ids),
+            y: data.map(row => row.sample_values),
             orientation: 'h'
-        }];
+        };
 
-    Plotly.newPlot("bar", plot);
+        var chartData = [trace1];
+
+    Plotly.newPlot("bar", chartData);
 
     });
-};
 
-buildPlot();    
+// buildPlot();   
