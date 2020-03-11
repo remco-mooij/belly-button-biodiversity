@@ -15,13 +15,9 @@
 
         var chartData = [trace1];
 
-        var layout = {
-            xaxis: {
-                range: [xValues]
-            }
-        };
 
-    Plotly.newPlot("bar", chartData, layout);
+
+    Plotly.newPlot("bar", chartData);
 
     });
 
