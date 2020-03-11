@@ -1,8 +1,8 @@
 
     d3.json("samples.json").then((importedData) => {
         var data = importedData;
-        var xValues = data.samples.map(row => row.otu_ids);
-        var yValues = data.samples.map(row => row.sample_values);
+        var xValues = data.map(row => row.samples.otu_ids);
+        var yValues = data.map(row => row.samples.sample_values);
 
 
         var trace1 = {
