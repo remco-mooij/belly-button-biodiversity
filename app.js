@@ -4,8 +4,8 @@
 
         var trace1 = {
             type: 'bar',
-            x: data.map(row => row.otu_ids),
-            y: data.map(row => row.sample_values),
+            x: data.samples.map(row => row[1]),
+            y: data.samples.map(row => row[1]),
             orientation: 'h'
         };
 
