@@ -4,6 +4,7 @@
         var xValues = data.map(row => row.samples.otu_ids);
         var yValues = data.map(row => row.samples.sample_values);
 
+        console.log(xValues);
 
         var trace1 = {
             type: 'bar',
@@ -20,7 +21,7 @@
             }
         };
 
-    Plotly.newPlot("bar", chartData);
+    Plotly.newPlot("bar", chartData, layout);
 
     });
 
