@@ -2,7 +2,7 @@
     d3.json("samples.json").then((importedData) => {
         var data = importedData;
         var samples = data.samples;
-        var resultArray = samples.filter(sampleObject => sampleObject.id == sample);
+        var resultArray = samples.filter(sampleObject => sampleObject.id == data);
         var result = resultArray[0];
         console.log(result);
         // var xValues = data.map(row => row.samples.otu_ids);
