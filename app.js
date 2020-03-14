@@ -1,7 +1,3 @@
-
-
-
-
 // Add ID numbers to dropdown menu and build initial dashboard
 function init() {
     d3.json("samples.json").then((importedData) => {
