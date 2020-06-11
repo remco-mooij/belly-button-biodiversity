@@ -119,10 +119,10 @@ function buildData() {
             text: ['0-1', '1-2', '2-3', '3-4', '4-5', '5-6', '6-7', '7-8', '8-9', ' '],
             textinfo: 'text',
             textposition:'inside',	  
-            marker: {colors:['rgba(14, 127, 0, .5)', 'rgba(110, 154, 22, .5)',
-                                    'rgba(170, 202, 42, .5)', 'rgba(202, 209, 95, .5)',
-                                    'rgba(210, 206, 145, .5)', 'rgba(232, 226, 202, .5)',
-                                    'rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0)', 'white']},
+            marker: {colors:['F5F8EF', 'E8EEDA',
+            'E0E5BD', 'D1E6A8',
+            'C1DC8B', 'AEC28E',
+            '8BBD7C', '70A170', '638A61', 'white']},
             labels: ['0-1', '1-2', '2-3', '3-4', '4-5', '5-6', '6-7', '7-8', '8-9', ' '],
             hoverinfo: 'label',
             hole: .5,
@@ -140,7 +140,7 @@ function buildData() {
                     color: '850000'
                 }
                 }],
-            title: '<b>Gauge</b> <br> Speed 0-100',
+            title: '<b>Belly Button Washing Frequency</b> <br> Scrubs per Week',
             height: 700,
             width: 700,
             xaxis: {zeroline:false, showticklabels:false,
