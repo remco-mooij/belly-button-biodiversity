@@ -1,4 +1,4 @@
-// Add ID numbers to dropdown menu and build initial dashboard
+// add ID numbers to dropdown menu and build initial dashboard
 function init() {
     d3.json("samples.json").then((importedData) => {
         var names = importedData.names;
@@ -9,14 +9,14 @@ function init() {
             .text(`${name}`);
         });
 
-        // Call buildData() function to build initial dashboard
+        
         buildData();
     });
 };
 
 init();
 
-// Call buildData() function when user select an ID number from dropdown menu
+// call buildData() function when user select an ID number from dropdown menu
 d3.selectAll("#selDataset").on("change", buildData);
 
 function buildData() {
@@ -24,6 +24,11 @@ function buildData() {
     console.log(selection);
 
     d3.json("samples.json").then((importedData) => {
+        var metaData = importedData.metadata;
+        var metaDataObject = metaData.filter(sampleObject => sampleObject.id == selection);
+        var metaDataValues = metaDataObject[0];
+        var washingFreq = metaDataValues.wfreq;
+        
         var samples = importedData.samples;
         var resultArray = samples.filter(sampleObject => sampleObject.id == selection);
         var result = resultArray[0];
@@ -36,9 +41,7 @@ function buildData() {
         var yTopTen = otuIds.slice(0, 10).reverse();
         var hoverTopTen = otuLabels.slice(0, 10).reverse();
 
-        console.log(xTopTen);
-        console.log(yTopTen);
-        console.log(hoverTopTen);
+
 
         otuArray = [];
         yTopTen.forEach(function(id) {
@@ -47,7 +50,7 @@ function buildData() {
         });
         console.log(otuArray);
 
-        // Build charts
+        // build charts
         var barChart = [{
             type: 'bar',
             x: xTopTen,
@@ -85,15 +88,78 @@ function buildData() {
             }
         };
 
+        // Enter a speed between 0 and 180
+        var level = 100;
+
+        // Trig to calc meter point
+        var degrees = 180 - level,
+            radius = .5;
+        var radians = degrees * Math.PI / 180;
+        var x = radius * Math.cos(radians);
+        var y = radius * Math.sin(radians);
+
+        // Path: may have to change to create a better triangle
+        var mainPath = 'M -.03 -0.025 L .03 0.025 L ',
+            pathX = String(x),
+            space = ' ',
+            pathY = String(y),
+            pathEnd = ' Z';
+        var path = mainPath.concat(pathX,space,pathY,pathEnd);
+
+        var gaugeChart = [{ type: 'scatter',
+            x: [0], y:[0],
+                marker: {size: 50, color:'850000'},
+                showlegend: false,
+                name: 'speed',
+               
+                hoverinfo: 'text+name'},
+            { values: [50/9, 50/9, 50/9, 50/9, 50/9, 50/9, 50/9, 50/9, 50/9, 50],
+            direction: 'clockwise',
+            rotation: 90,
+            text: ['0-1', '1-2', '2-3', '3-4', '4-5', '5-6', '6-7', '7-8', '8-9', ' '],
+            textinfo: 'text',
+            textposition:'inside',	  
+            marker: {colors:['rgba(14, 127, 0, .5)', 'rgba(110, 154, 22, .5)',
+                                    'rgba(170, 202, 42, .5)', 'rgba(202, 209, 95, .5)',
+                                    'rgba(210, 206, 145, .5)', 'rgba(232, 226, 202, .5)',
+                                    'rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0)', 'white']},
+            labels: ['0-1', '1-2', '2-3', '3-4', '4-5', '5-6', '6-7', '7-8', '8-9', ' '],
+            hoverinfo: 'label',
+            hole: .5,
+            type: 'pie',
+            showlegend: false
+            }];
+
+            var gaugeLayout = {
+            shapes:[{
+                type: 'path',
+                path: path,
+               
+                fillcolor: '850000',
+                line: {
+                    color: '850000'
+                }
+                }],
+            title: '<b>Gauge</b> <br> Speed 0-100',
+            height: 700,
+            width: 700,
+            xaxis: {zeroline:false, showticklabels:false,
+                        showgrid: false, range: [-1, 1]},
+            yaxis: {zeroline:false, showticklabels:false,
+                        showgrid: false, range: [-1, 1]}
+            };
+
+    Plotly.newPlot("gauge", gaugeChart, gaugeLayout);
+
     Plotly.newPlot("bubble", bubbleChart, bubbleLayout);
     Plotly.newPlot("bar", barChart, barLayout);
 
-    // Call displayMetadata() function to display demographic info 
     displayMetadata();
 
     });
 };
 
+// display demographic info
 function displayMetadata() {
     d3.json("samples.json").then((importedData) => {
         var metaData = importedData.metadata
