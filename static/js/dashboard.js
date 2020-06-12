@@ -1,6 +1,6 @@
 // add ID numbers to dropdown menu and build initial dashboard
 function init() {
-    d3.json("samples.json").then((importedData) => {
+    d3.json("static/resources/samples.json").then((importedData) => {
         var names = importedData.names;
         var dropdownList = d3.select("#selDataset");
 
@@ -23,12 +23,14 @@ function buildData() {
     var selection = d3.select("#selDataset").property("value");
     console.log(selection);
 
-    d3.json("samples.json").then((importedData) => {
+    d3.json("static/resources/samples.json").then((importedData) => {
+        // get washing frequency value for gauge chart
         var metaData = importedData.metadata;
         var metaDataObject = metaData.filter(sampleObject => sampleObject.id == selection);
         var metaDataValues = metaDataObject[0];
         var washingFreq = metaDataValues.wfreq;
         
+        // get sample values filtered on selection
         var samples = importedData.samples;
         var resultArray = samples.filter(sampleObject => sampleObject.id == selection);
         var result = resultArray[0];
@@ -40,9 +42,8 @@ function buildData() {
         var xTopTen = sampleValues.slice(0, 10).reverse();
         var yTopTen = otuIds.slice(0, 10).reverse();
         var hoverTopTen = otuLabels.slice(0, 10).reverse();
-
-
-
+        
+        // create array of labels for y-axis of bar chart 
         otuArray = [];
         yTopTen.forEach(function(id) {
             var otuName = `OTU ${id}`;
@@ -51,6 +52,8 @@ function buildData() {
         console.log(otuArray);
 
         // build charts
+
+        // bar chart
         var barChart = [{
             type: 'bar',
             x: xTopTen,
@@ -62,6 +65,7 @@ function buildData() {
         var barLayout = {
             width: 400,
             height: 600,
+            margin: {'t': 0},
             xaxis: {
                 autorange: true,
             },
@@ -71,7 +75,9 @@ function buildData() {
             }
         };
 
+        // bubble chart
         var bubbleChart = [{
+            type: 'scatter',
             x: otuIds,
             y: sampleValues,
             mode: 'markers',
@@ -83,22 +89,20 @@ function buildData() {
         }];
 
         var bubbleLayout = {
-            xaxis: {
-                title: "OTU ID"
-            }
+            xaxis: {title: "OTU ID", autorange: true},
+            yaxis: {range: [Math.min(sampleValues), Math.max(sampleValues)],
+                    mode: 'linear'},
+            margin: {t: 0, pad: 0}
         };
 
-        // Enter a speed between 0 and 180
-        var level = 100;
-
-        // Trig to calc meter point
-        var degrees = 180 - level,
-            radius = .5;
-        var radians = degrees * Math.PI / 180;
+        // gauge chart
+        // meter point settings
+        var level = washingFreq;
+        var degrees = 9 - level, radius = .5;
+        var radians = degrees * Math.PI / 9.5;
         var x = radius * Math.cos(radians);
         var y = radius * Math.sin(radians);
 
-        // Path: may have to change to create a better triangle
         var mainPath = 'M -.03 -0.025 L .03 0.025 L ',
             pathX = String(x),
             space = ' ',
@@ -106,12 +110,13 @@ function buildData() {
             pathEnd = ' Z';
         var path = mainPath.concat(pathX,space,pathY,pathEnd);
 
+        // chart properties
         var gaugeChart = [{ type: 'scatter',
             x: [0], y:[0],
-                marker: {size: 50, color:'850000'},
+                marker: {size: 40, color:'850000'},
                 showlegend: false,
-                name: 'speed',
-               
+                name: 'frequency',
+                text: level,               
                 hoverinfo: 'text+name'},
             { values: [50/9, 50/9, 50/9, 50/9, 50/9, 50/9, 50/9, 50/9, 50/9, 50],
             direction: 'clockwise',
@@ -134,25 +139,24 @@ function buildData() {
             shapes:[{
                 type: 'path',
                 path: path,
-               
+                margin: {l: 0, r: 0, b: 0, t: 0, pad: 0},
                 fillcolor: '850000',
                 line: {
                     color: '850000'
                 }
                 }],
             title: '<b>Belly Button Washing Frequency</b> <br> Scrubs per Week',
-            height: 700,
-            width: 700,
+            height: 600,
+            width: 600,
             xaxis: {zeroline:false, showticklabels:false,
                         showgrid: false, range: [-1, 1]},
             yaxis: {zeroline:false, showticklabels:false,
                         showgrid: false, range: [-1, 1]}
             };
-
-    Plotly.newPlot("gauge", gaugeChart, gaugeLayout);
-
-    Plotly.newPlot("bubble", bubbleChart, bubbleLayout);
-    Plotly.newPlot("bar", barChart, barLayout);
+    
+    Plotly.newPlot("gauge", gaugeChart, gaugeLayout, {displayModeBar: false});
+    Plotly.newPlot("bubble", bubbleChart, bubbleLayout, {displayModeBar: false});
+    Plotly.newPlot("bar", barChart, barLayout, {displayModeBar: false});
 
     displayMetadata();
 
@@ -161,7 +165,7 @@ function buildData() {
 
 // display demographic info
 function displayMetadata() {
-    d3.json("samples.json").then((importedData) => {
+    d3.json("static/resources/samples.json").then((importedData) => {
         var metaData = importedData.metadata
         var selection = d3.select("#selDataset").property("value");
     

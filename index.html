@@ -7,6 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Bellybutton Biodiversity</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static/css/style.css">
 </head>
 
 <body>
@@ -14,42 +15,59 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12 jumbotron text-center">
-        <h1>Belly Button Biodiversity Dashboard</h1>
+        <h1 style="font-weight: bolder;">Belly Button Biodiversity Dashboard</h1>
         <p>Use the interactive charts below to explore the dataset</p>
       </div>
     </div>
+
     <div class="row">
+
+      <!-- test subject dropdown -->
       <div class="col-md-2">
         <div class="well">
           <h5>Test Subject ID No.:</h5>
           <select id="selDataset" onchange="optionChanged(this.value)">
-          <option>Test</option></select>
+          <option></option></select>
         </div>
+        
         <div class="panel panel-primary">
           <div class="panel-heading">
             <h3 class="panel-title">Demographic Info</h3>
           </div>
           <div id="sample-metadata" class="panel-body"></div>
         </div>
+
       </div>
-      <div class="col-md-5">
-        <div id="bar"></div>
-      </div>
-      <div class="col-md-5">
-        <div id="gauge"></div>
-      </div>
+      
+      <!-- bar graph -->
+      <div class="col-md-3" id="bar"></div>
+      <!-- gauge chart -->
+      <div class="col-md-5" id="gauge" ></div>
+        
     </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div id="bubble"></div>
+   
+    <!-- bubble chart -->
+    <div class="row-md-10" id="bubble"></div>
+    <br><br><br><br>
+
+    <footer class="footer">
+      <div class="container-fluid text-center">   
+        <a href="https://github.com/remco-mooij/belly-button-biodiversity" target="_blank">
+          <img src="static/images/GitHub-Mark-32px.png">
+        </a>
+        <p class="text text-center" style="margin-top:5px;">
+          <small>Copyright © 2020 Remco Mooij</br>
+            UNC CHAPEL HILL © Data Analytics Boot Camp</small>
+        </p>
       </div>
-    </div>
+    </footer>
+
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <script src="app.js"></script>
-  <script src="samples.json"></script>
+  <script src="static/js/dashboard.js"></script>
+  <script src="static/resources/samples.json"></script>
 
 </body>
 
